@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+  <title>My Store</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+  <h3>Hello!</h3>
+  <table>
+    <tr>
+      <td>Username</td>
+      <td><input type="text" id="username"></td>
+    </tr>
+    <tr>
+      <td>Password</td>
+      <td><input type="password" id="password"></td>
+    </tr>
+    <tr>
+      <td>
+        <button id="send">Send</button>
+      </td>
+    </tr>
+  </table>
+
+<script>
+  var username = document.getElementById('username');
+  var password = document.getElementById('password');
+  var send = document.getElementById('send');
+
+  send.onclick = function() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/login', true);
+    xhr.setRequestHeader('content-type', 'application/json;charset=utf-8');
+    var body = {
+      username: username.value,
+      password: password.value
+    };
+    xhr.send(JSON.stringify(body));
+    xhr.onreadystatechange = function() {
+      if(xhr.readyState !== 4) return;
+      var token = xhr.responseText;
+      console.log(token);
+      //onceMore(token);
+        fetch('/products/id-2?name=AAAAA&price=45', {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        })
+        .then( response => {
+                              console.log('???????????????', response.status);
+          return response.json();
+        })
+        .then( res => {
+          console.log(res);
+        })
+        .catch( err => console.log(err));
+    };
+  };
+
+  // function onceMore(token) {
+  //  var x = new XMLHttpRequest();
+  //  x.open('GET', '/products/id-2?name=AAAAA&price=45');
+  //  x.setRequestHeader('Authorization', 'Bearer ' + token);
+  //  x.send();
+  //  x.onreadystatechange = function() {
+  //    if(x.readyState !== 4) return;
+  //    console.log(x.responseText);
+  //  };
+  // }
+</script>
+</body>
+</html>
