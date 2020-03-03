@@ -1,5 +1,8 @@
 "use strict";
 
+//const { Middlewares } = require("moleculer");
+//Middlewares.Awesome = require('./middlewares/awesome.middleware');
+
 module.exports = {
   // Namespace of nodes to segment your nodes on the same network.
   namespace: "",
@@ -165,7 +168,7 @@ module.exports = {
   },
 
   // Register custom middlewares
-  middlewares: [/*"OtherMiddleware"*/],
+  middlewares: [/*"Awesome"*/],
 
   // Register custom REPL commands.
   replCommands: null,

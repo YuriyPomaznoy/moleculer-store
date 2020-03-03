@@ -1,7 +1,7 @@
-var mongoose = require('../lib/mongooseConnect');
-var Schema = mongoose.Schema;
-var crypto = require('crypto');
-var secretKey = require('../credentials').authSecret;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const crypto = require('crypto');
+const secretKey = require('../credentials').authSecret;
 
 var userSchema = new Schema({
   username: {

@@ -1,10 +1,7 @@
 const HTTPServer = require("moleculer-web");
 const myMiddleware = require('../middlewares/my.middleware');
-const User = require('../models/User');
-const jwt = require('jsonwebtoken');
-var secret = require('../credentials').authSecret;
 const passport = require('passport');
-var authenticationStrategy = require('../lib/authentication');
+const authenticationStrategy = require('../lib/authentication');
 
 module.exports = {
   name: "gateway",
@@ -15,23 +12,12 @@ module.exports = {
     routes: [{
       
       path: "/",
-      //use: [
-      //  myMiddleware
-      //],
+
       aliases: {
 
         "GET /products/:id": [
-          function(req, res, next) {
-            passport.authenticate('jwt', { session: false }, function(err, user, info) {
-                          console.log('errrrrr', err);
-                          console.log('USERRRRRRR', user);
-                          console.log('INFO', info);
-              if(user) next();
-            })(req, res, next);
-          },
+            passport.authenticate('jwt', { session: false }),
             function (req, res) {
-                          console.log(req['$params'], req.query);
-                          console.log(req.headers.authorization);
               var params = { name: req.query.name, price: req.query.price };
               this.broker.call("products.listProducts", params)
                 .then( result => {
@@ -56,21 +42,7 @@ module.exports = {
               });
           }
         ],
-        "POST /login"(req, res) {
-          if(req.body.username && req.body.password) {
-            var username = req.body.username;
-            var password = req.body.password;
-          }
-          
-          User.findOne({ username: username })
-            .then( user => {
-              if(user.validPassword(password, secret)) {
-                var payload = { userId: user.id };
-                var token = jwt.sign(payload, secret);
-                res.end(token);
-              }
-            });
-        }
+        "POST /login": "authorization.validUser"
       }
     }],
 
