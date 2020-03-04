@@ -40,12 +40,12 @@
     xhr.send(JSON.stringify(body));
     xhr.onreadystatechange = function() {
       if(xhr.readyState !== 4) return;
-      var token = xhr.responseText;
+      var data = JSON.parse(xhr.responseText);
                                 console.log(xhr.getResponseHeader("Content-Type"));
-                                console.log(token);
+                                console.log(data.token);
         fetch('/products/id-2?name=AAAAA&price=45', {
           headers: {
-            'Authorization': 'Bearer ' + token
+            'Authorization': 'Bearer ' + data.token
           }
         })
         .then( response => {

@@ -18,14 +18,14 @@ module.exports = {
         var password = ctx.params.password;
       }
 
-      ctx.meta.$responseType = 'text/plain;charset=utf-8'; //$responseHeaders
+      //ctx.meta.$responseType = 'text/plain;charset=utf-8'; //$responseHeaders
           
       return this.adapter.find({query: { username: username }})
         .then( users => {
           if(users[0].validPassword(password, secret)) {
             var payload = { userId: users[0].id };
             var token = jwt.sign(payload, secret);
-            return token;
+            return {token};
           }
         });
     }
